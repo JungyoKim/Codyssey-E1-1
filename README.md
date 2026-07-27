@@ -1,9 +1,5 @@
 # 개발 워크스테이션 구축 미션
 
-> ⚠️ 이 파일은 템플릿입니다. `[ ]`, `여기에 붙여넣기`, `<!-- TODO -->` 로 표시된 부분을
-> 실제로 터미널에서 실행한 결과(명령어+출력)와 스크린샷으로 교체한 뒤 제출하세요.
-> 민감정보(토큰/비밀번호/개인키)는 절대 포함하지 마세요.
-
 ## 1) 프로젝트 개요
 
 - 목표: 터미널/파일 권한, Docker(OrbStack), Dockerfile 기반 커스텀 이미지, 포트 매핑,
@@ -56,12 +52,18 @@
 
 ```bash
 $ pwd
-[여기에 붙여넣기]
+imkimjungyo3207@c5r1s6 Documents % pwd
 
-$ mkdir -p ~/dev-workstation-mission
-$ cd ~/dev-workstation-mission
+$ mkdir -p ~/e1-1
+$ cd ~/e1-1
 $ ls -la
-[여기에 붙여넣기]
+imkimjungyo3207@c5r1s6 Documents % mkdir -p ~/e1-1   
+imkimjungyo3207@c5r1s6 Documents % cd ~/e1-1         
+imkimjungyo3207@c5r1s6 e1-1 % ls -la
+total 0
+drwxr-xr-x   2 imkimjungyo3207  imkimjungyo3207   64  7 28 07:27 .
+drwxr-x---+ 22 imkimjungyo3207  imkimjungyo3207  704  7 28 07:27 ..
+imkimjungyo3207@c5r1s6 e1-1 % 
 ```
 
 ### 기본 조작 (이동/생성/복사/이름변경/삭제/내용확인)
