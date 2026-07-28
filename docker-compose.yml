@@ -1,0 +1,14 @@
+services:
+  web:
+    build: .
+    container_name: devws-compose
+    ports:
+      - "8080:80"
+    volumes:
+      - ./site:/usr/share/nginx/html   # 바인드 마운트: 정적 파일 실시간 반영
+      - nginx-logs:/var/log/nginx      # 네임드 볼륨: 접속 로그 영속화
+    environment:
+      - APP_ENV=development
+
+volumes:
+  nginx-logs:

@@ -1,0 +1,13 @@
+server {
+    listen       80;
+    server_name  localhost;
+
+    add_header X-App-Env "${APP_ENV}" always;
+
+    access_log /var/log/nginx/custom_access.log;
+
+    location / {
+        root   /usr/share/nginx/html;
+        index  index.html;
+    }
+}
