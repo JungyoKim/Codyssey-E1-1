@@ -316,14 +316,36 @@ branch 'main' set up to track 'origin/main'.
 
 ## 7) Docker Compose
 
+## 7) Docker Compose
+
 프로젝트 내 포함된 `docker-compose.yml`을 통해 멀티 컨테이너 환경 조작 가능:
 
-```bash
+​```bash
 $ docker compose up -d
+[+] Running 2/2
+ ✔ Network project_default  Created
+ ✔ Container devws-compose  Started
+
 $ docker compose ps
+NAME            IMAGE         COMMAND                   SERVICE   STATUS                    PORTS
+devws-compose   project-web   "/docker-entrypoint.…"   web       Up (health: starting)     0.0.0.0:8080->80/tcp
+
+$ curl -I http://localhost:8080
+HTTP/1.1 200 OK
+Server: nginx/1.31.3
+X-App-Env: development
+...
+
 $ docker compose logs
+devws-compose  | 2026/07/28 02:40:38 [notice] 1#1: nginx/1.31.3
+devws-compose  | 2026/07/28 02:40:38 [notice] 1#1: start worker processes
+...
+
 $ docker compose down
-```
+[+] Running 2/2
+ ✔ Container devws-compose  Removed
+ ✔ Network project_default  Removed
+​```
 
 ![healthcheck](./evidence/healthcheck.png)
 
