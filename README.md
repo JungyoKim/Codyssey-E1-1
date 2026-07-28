@@ -1,11 +1,6 @@
-# 개발 워크스테이션 구축 미션
+# E1-1
 
-## 1) 프로젝트 개요
-
-- **목표**: 터미널/파일 권한, Docker(OrbStack), Dockerfile 기반 커스텀 이미지, 포트 매핑, 바인드 마운트, 볼륨 영속성, Git/GitHub 연동까지 개발 워크스테이션의 기본기를 직접 손으로 세팅하고 검증한다.
-- **구성**: `nginx:alpine` 베이스 커스텀 이미지. 정적 콘텐츠(`site/`)와 nginx 설정(`default.conf.template`)을 교체했고, 환경변수(`APP_ENV`)를 커스텀 응답 헤더로 노출해 재빌드 없이 `-e` 값만 바꿔도 동작이 달라지는 것을 확인한다. 바인드 마운트로 정적 파일 즉시 반영을, 접속 로그(`/var/log/nginx`)를 볼륨에 저장해 컨테이너를 삭제해도 데이터가 유지되는 것을 확인한다.
-
-## 2) 실행 환경
+## 1) 실행 환경
 
 - **OS**: macOS 15.7.7
 - **Shell / Terminal**: zsh / macOS Console
@@ -13,7 +8,7 @@
 - **Docker**: `Docker version 28.5.2, build ecc6942`
 - **Git**: `git version 2.39.5 (Apple Git-154)`
 
-## 3) 수행 항목 체크리스트
+## 2) 수행 항목 체크리스트
 
 - [x] 터미널 기본 조작 (이동/생성/복사/이름변경/삭제/내용확인)
 - [x] 파일/디렉토리 권한 변경 실습 (각 1개 이상)
@@ -27,7 +22,7 @@
 - [x] Git 사용자 정보 설정 + GitHub/VSCode 연동
 - [x] (보너스) Docker Compose 실행 준비
 
-## 4) 검증 방법 & 결과 위치
+## 3) 검증 방법 & 결과 위치
 
 | 항목 | 확인한 명령 | 증거 위치 |
 |---|---|---|
@@ -314,7 +309,7 @@ branch 'main' set up to track 'origin/main'.
 
 **해결/대안**: `git pull origin main --no-rebase --allow-unrelated-histories`로 이력을 병합하고, 충돌된 README.md를 `git checkout --ours README.md`로 정리 후 병합 커밋을 작성하여 푸시 완료.
 
-## 7) (보너스) Docker Compose
+## 7) Docker Compose
 
 프로젝트 내 포함된 `docker-compose.yml`을 통해 멀티 컨테이너 환경 조작 가능:
 
