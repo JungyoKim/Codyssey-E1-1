@@ -205,8 +205,6 @@ X-App-Env: production
 Connection: keep-alive
 ```
 
-![port-mapping](./evidence/port-mapping.png)
-
 ### 4-3) 바인드 마운트 반영 확인
 
 ```bash
@@ -326,6 +324,8 @@ $ docker compose ps
 $ docker compose logs
 $ docker compose down
 ```
+
+![healthcheck](./evidence/healthcheck.png)
 
 ## 8) 핵심 개념 정리
 
