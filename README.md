@@ -205,6 +205,8 @@ X-App-Env: production
 Connection: keep-alive
 ```
 
+![port-mapping](./evidence/port-mapping.png)
+
 ### 4-3) 바인드 마운트 반영 확인
 
 ```bash
@@ -224,6 +226,9 @@ imkimjungyo3207@c5r1s6 project % curl http://localhost:8080
 </body>
 </html>
 ```
+
+![bind-before](./evidence/bind-before.png)
+![bind-after](./evidence/bind-after.png)
 
 ### 4-4) 볼륨 영속성 확인 (접속 로그로 검증)
 
@@ -276,6 +281,8 @@ To https://github.com/JungyoKim/Codyssey-E1-1
    611ad93..54e7e42  main -> main
 branch 'main' set up to track 'origin/main'.
 ```
+
+![vscode-github](./evidence/vscode-github.png)
 
 ## 6) 트러블슈팅
 
