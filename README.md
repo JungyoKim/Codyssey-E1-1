@@ -164,6 +164,27 @@ CONTAINER ID   IMAGE         COMMAND            CREATED          STATUS         
 80dfa6dede6b   hello-world   "/hello"           28 minutes ago   Exited (0) 28 minutes ago             priceless_albattani
 ```
 
+### 이미지 목록 / 로그 / 리소스 확인
+
+```bash
+imkimjungyo3207@c5r1s6 project % docker images
+REPOSITORY     TAG       IMAGE ID       CREATED          SIZE
+my-nginx-app   1.0       6506242f223f   46 minutes ago   62.4MB
+<none>         <none>    44bc7c4c692b   4 hours ago      62.4MB
+<none>         <none>    7968e08de886   4 hours ago      62.4MB
+project-web    latest    454e6046078e   4 hours ago      62.4MB
+<none>         <none>    8b10afca2e15   4 hours ago      62.4MB
+ubuntu         latest    de7345b16e94   2 weeks ago      100MB
+hello-world    latest    e2ac70e7319a   4 months ago     10.1kB
+
+imkimjungyo3207@c5r1s6 project % docker logs e1-1-bg
+(출력 없음 — e1-1-bg는 "sleep infinity"만 실행 중이라 표준출력으로 남기는 로그가 없음)
+
+imkimjungyo3207@c5r1s6 project % docker stats --no-stream
+CONTAINER ID   NAME      CPU %     MEM USAGE / LIMIT     MEM %     NET I/O         BLOCK I/O        PIDS
+3a71931fbd18   e1-1-bg   0.00%     1.215MiB / 15.67GiB   0.01%     2.46kB / 126B   15.3MB / 4.1kB   1
+```
+
 ## 4) Dockerfile 기반 커스텀 이미지
 
 **선택한 방식**: 웹 서버 베이스 이미지(`nginx:alpine`) + 정적 콘텐츠/설정 교체
