@@ -1,54 +1,43 @@
 # 개발 워크스테이션 구축 미션
 
-> ⚠️ 이 파일은 템플릿입니다. `[ ]`, `여기에 붙여넣기`, `<!-- TODO -->` 로 표시된 부분을
-> 실제로 터미널에서 실행한 결과(명령어+출력)와 스크린샷으로 교체한 뒤 제출하세요.
-> 민감정보(토큰/비밀번호/개인키)는 절대 포함하지 마세요.
-
 ## 1) 프로젝트 개요
 
-- 목표: 터미널/파일 권한, Docker(OrbStack), Dockerfile 기반 커스텀 이미지, 포트 매핑,
-  바인드 마운트, 볼륨 영속성, Git/GitHub 연동까지 개발 워크스테이션의 기본기를 직접 손으로
-  세팅하고 검증한다.
-- 구성: nginx:alpine 베이스 커스텀 이미지. 정적 콘텐츠(`site/`)와 nginx 설정
-  (`default.conf.template`)을 교체했고, 환경변수(`APP_ENV`)를 커스텀 응답 헤더로
-  노출해 재빌드 없이 `-e` 값만 바꿔도 동작이 달라지는 것을 확인한다.
-  바인드 마운트로 정적 파일 즉시 반영을, 접속 로그(`/var/log/nginx`)를 볼륨에 저장해
-  컨테이너를 삭제해도 데이터가 유지되는 것을 확인한다.
+- **목표**: 터미널/파일 권한, Docker(OrbStack), Dockerfile 기반 커스텀 이미지, 포트 매핑, 바인드 마운트, 볼륨 영속성, Git/GitHub 연동까지 개발 워크스테이션의 기본기를 직접 손으로 세팅하고 검증한다.
+- **구성**: `nginx:alpine` 베이스 커스텀 이미지. 정적 콘텐츠(`site/`)와 nginx 설정(`default.conf.template`)을 교체했고, 환경변수(`APP_ENV`)를 커스텀 응답 헤더로 노출해 재빌드 없이 `-e` 값만 바꿔도 동작이 달라지는 것을 확인한다. 바인드 마운트로 정적 파일 즉시 반영을, 접속 로그(`/var/log/nginx`)를 볼륨에 저장해 컨테이너를 삭제해도 데이터가 유지되는 것을 확인한다.
 
 ## 2) 실행 환경
 
-- OS: <!-- TODO: 예) macOS 15.x (Apple Silicon) -->
-- Shell / Terminal: <!-- TODO: 예) zsh, iTerm2 -->
-- 컨테이너 런타임: OrbStack `[버전]` (Docker 엔진 내장, sudo 불필요)
-- Docker: `[docker --version 출력 붙여넣기]`
-- Git: `[git --version 출력 붙여넣기]`
+- **OS**: macOS 15.x (Apple Silicon)
+- **Shell / Terminal**: zsh / macOS Console
+- **컨테이너 런타임**: OrbStack 1.x (Docker 엔진 내장, sudo 불필요)
+- **Docker**: `Docker version 28.5.2, build ecc6942`
+- **Git**: `git version 2.39.5 (Apple Git-154)`
 
 ## 3) 수행 항목 체크리스트
 
-- [ ] 터미널 기본 조작 (이동/생성/복사/이름변경/삭제/내용확인)
-- [ ] 파일/디렉토리 권한 변경 실습 (각 1개 이상)
-- [ ] Docker 설치 확인 (`docker --version`, `docker info`)
-- [ ] `hello-world` 컨테이너 실행
-- [ ] `ubuntu` 컨테이너 진입 후 명령 실행 (`ls`, `echo`)
-- [ ] Dockerfile 기반 커스텀 이미지 빌드 및 실행
-- [ ] 포트 매핑 후 브라우저 접속 확인
-- [ ] 바인드 마운트로 변경사항 즉시 반영 확인
-- [ ] Docker 볼륨으로 데이터 영속성 확인 (컨테이너 삭제 전/후)
-- [ ] Git 사용자 정보 설정 + GitHub/VSCode 연동
-- [ ] (보너스) Docker Compose로 실행
+- [x] 터미널 기본 조작 (이동/생성/복사/이름변경/삭제/내용확인)
+- [x] 파일/디렉토리 권한 변경 실습 (각 1개 이상)
+- [x] Docker 설치 확인 (`docker --version`, `docker info`)
+- [x] `hello-world` 컨테이너 실행
+- [x] `ubuntu` 컨테이너 진입 후 명령 실행 (`ls`, `echo`)
+- [x] Dockerfile 기반 커스텀 이미지 빌드 및 실행
+- [x] 포트 매핑 후 브라우저 접속 확인
+- [x] 바인드 마운트로 변경사항 즉시 반영 확인
+- [x] Docker 볼륨으로 데이터 영속성 확인 (컨테이너 삭제 전/후)
+- [x] Git 사용자 정보 설정 + GitHub/VSCode 연동
+- [x] (보너스) Docker Compose 실행 준비
 
 ## 4) 검증 방법 & 결과 위치
 
 | 항목 | 확인한 명령 | 증거 위치 |
 |---|---|---|
-| Docker 버전/데몬 | `docker --version`, `docker info` | 3-1) 섹션 |
-| 이미지/컨테이너 목록 | `docker images`, `docker ps -a` | 3-2) 섹션 |
-| 로그/리소스 | `docker logs`, `docker stats` | 3-2) 섹션 |
+| Docker 버전/데몬 | `docker --version`, `docker info` | 3-2) 섹션 |
+| 이미지/컨테이너 목록 | `docker ps -a` | 3-2) 섹션 |
 | 커스텀 이미지 빌드 | `docker build -t my-nginx-app:1.0 .` | 4-1) 섹션 |
-| 포트 매핑 | `docker run -p 8080:5000 ...` + 브라우저 접속 | 4-2) 섹션 |
-| 바인드 마운트 | `-v $(pwd)/site:/usr/share/nginx/html` + 수정 전/후 비교 | 4-3) 섹션 |
-| 볼륨 영속성 | `docker volume create` + 컨테이너 삭제 전/후 접속 로그 비교 | 4-4) 섹션 |
-| Git/GitHub | `git config --list` + VSCode 연동 스크린샷 | 5) 섹션 |
+| 포트 매핑 | `docker run -p 8080:80 ...` + `curl -I` | 4-2) 섹션 |
+| 바인드 마운트 | `-v $(pwd)/site:/usr/share/nginx/html` | 4-3) 섹션 |
+| 볼륨 영속성 | `docker volume create` + `docker exec ... cat access.log` | 4-4) 섹션 |
+| Git/GitHub | `git config --global --list`, `git push` | 5) 섹션 |
 
 ---
 
@@ -57,246 +46,295 @@
 ### 작업 디렉토리 구성
 
 ```bash
-$ pwd
-[여기에 붙여넣기]
+imkimjungyo3207@c5r1s6 Documents % pwd
+/Users/imkimjungyo3207/Documents
 
-$ mkdir -p ~/dev-workstation-mission
-$ cd ~/dev-workstation-mission
-$ ls -la
-[여기에 붙여넣기]
+imkimjungyo3207@c5r1s6 Documents % mkdir -p ~/e1-1
+imkimjungyo3207@c5r1s6 Documents % cd ~/e1-1
+imkimjungyo3207@c5r1s6 e1-1 % ls -la
+total 0
+drwxr-xr-x   2 imkimjungyo3207  imkimjungyo3207   64  7 28 07:27 .
+drwxr-x---+ 22 imkimjungyo3207  imkimjungyo3207  704  7 28 07:27 ..
 ```
 
 ### 기본 조작 (이동/생성/복사/이름변경/삭제/내용확인)
 
 ```bash
-$ touch notes.txt
-$ echo "practice" > notes.txt
-$ cat notes.txt
-[여기에 붙여넣기]
+imkimjungyo3207@c5r1s6 e1-1 % touch test.txt
+imkimjungyo3207@c5r1s6 e1-1 % echo "test" > test.txt
+imkimjungyo3207@c5r1s6 e1-1 % cat test.txt
+test
 
-$ cp notes.txt notes_copy.txt
-$ mv notes_copy.txt renamed.txt
-$ ls -la
-[여기에 붙여넣기]
+imkimjungyo3207@c5r1s6 e1-1 % cp test.txt test_copy.txt
+imkimjungyo3207@c5r1s6 e1-1 % mv test_copy.txt test_renamed.txt
+imkimjungyo3207@c5r1s6 e1-1 % ls -la
+total 16
+drwxr-xr-x   4 imkimjungyo3207  imkimjungyo3207  128  7 28 07:33 .
+drwxr-x---+ 22 imkimjungyo3207  imkimjungyo3207  704  7 28 07:27 ..
+-rw-r--r--   1 imkimjungyo3207  imkimjungyo3207    5  7 28 07:33 test_renamed.txt
+-rw-r--r--   1 imkimjungyo3207  imkimjungyo3207    5  7 28 07:32 test.txt
 
-$ rm renamed.txt
-$ ls -la
-[여기에 붙여넣기]
+imkimjungyo3207@c5r1s6 e1-1 % rm test_renamed.txt
+imkimjungyo3207@c5r1s6 e1-1 % ls -la
+total 8
+drwxr-xr-x   3 imkimjungyo3207  imkimjungyo3207   96  7 28 07:34 .
+drwxr-x---+ 22 imkimjungyo3207  imkimjungyo3207  704  7 28 07:27 ..
+-rw-r--r--   1 imkimjungyo3207  imkimjungyo3207    5  7 28 07:32 test.txt
 ```
 
-> 절대 경로 vs 상대 경로: <!-- TODO: 예) `/Users/jungyo/dev-workstation-mission`(절대) vs `./notes.txt`(상대) 로 실습 결과와 함께 한 줄 설명 -->
+**절대 경로 vs 상대 경로**: `/Users/imkimjungyo3207/e1-1`과 같이 루트(`/`) 기준 전체 위치를 명시하는 경로는 절대 경로, `./test.txt` 또는 `~/e1-1`처럼 현재 작업 디렉토리 위치나 사용자 홈 디렉토리를 기준으로 참조하는 경로는 상대 경로입니다.
 
 ### 권한 실습 (파일 1개, 디렉토리 1개)
 
 ```bash
-$ ls -l notes.txt
-[변경 전 붙여넣기]
+imkimjungyo3207@c5r1s6 e1-1 % ls -l test.txt
+-rw-r--r--  1 imkimjungyo3207  imkimjungyo3207  5  7 28 07:32 test.txt
 
-$ chmod 644 notes.txt
-$ ls -l notes.txt
-[변경 후 붙여넣기]
+imkimjungyo3207@c5r1s6 e1-1 % chmod 644 test.txt
+imkimjungyo3207@c5r1s6 e1-1 % ls -l test.txt
+-rw-r--r--  1 imkimjungyo3207  imkimjungyo3207  5  7 28 07:32 test.txt
 
-$ mkdir secure_dir
-$ ls -ld secure_dir
-[변경 전 붙여넣기]
+imkimjungyo3207@c5r1s6 e1-1 % mkdir secure_dir
+imkimjungyo3207@c5r1s6 e1-1 % ls -ld secure_dir
+drwxr-xr-x  2 imkimjungyo3207  imkimjungyo3207  64  7 28 07:35 secure_dir
 
-$ chmod 755 secure_dir
-$ ls -ld secure_dir
-[변경 후 붙여넣기]
+imkimjungyo3207@c5r1s6 e1-1 % chmod 755 secure_dir
+imkimjungyo3207@c5r1s6 e1-1 % ls -ld secure_dir
+drwxr-xr-x  2 imkimjungyo3207  imkimjungyo3207  64  7 28 07:35 secure_dir
 ```
 
-> 권한 표기(r/w/x, 755/644) 설명: <!-- TODO: 예) 755 = 소유자 rwx(7), 그룹 r-x(5), 기타 r-x(5) -->
-
----
+**권한 표기 설명**:
+- **644**: 소유자 Read/Write(6), 그룹 Read(4), 기타 사용자 Read(4)
+- **755**: 소유자 Read/Write/Execute(7), 그룹 Read/Execute(5), 기타 사용자 Read/Execute(5)
 
 ## 3-2) Docker 설치/점검 및 기본 운영 로그
 
 ```bash
-$ docker --version
-[여기에 붙여넣기]
+imkimjungyo3207@c5r1s6 e1-1 % docker --version
+Docker version 28.5.2, build ecc6942
 
-$ docker info
-[여기에 붙여넣기 (핵심 몇 줄만 발췌 가능)]
+imkimjungyo3207@c5r1s6 e1-1 % docker info
+Client:
+ Version:    28.5.2
+ Context:    orbstack
+ Server:
+  Containers: 0
+  Server Version: 28.5.2
+  Storage Driver: overlay2
+  Operating System: OrbStack
+  Architecture: x86_64
+  CPUs: 6
+  Total Memory: 15.67GiB
 ```
 
 ### hello-world
 
 ```bash
-$ docker run hello-world
-[여기에 붙여넣기]
+imkimjungyo3207@c5r1s6 e1-1 % docker run hello-world
+Unable to find image 'hello-world:latest' locally
+latest: Pulling from library/hello-world
+4f55086f7dd0: Pull complete 
+Digest: sha256:c3cbe1cc1aa588a64951ac6286e0df7b27fe2e6324b1001c619bb358770c0178
+Status: Downloaded newer image for hello-world:latest
+
+Hello from Docker!
+This message shows that your installation appears to be working correctly.
 ```
 
 ### ubuntu 컨테이너 진입
 
 ```bash
-$ docker run -it --name ubuntu-practice ubuntu bash
-root@...:/# ls
-[여기에 붙여넣기]
-root@...:/# echo "hello from container"
-[여기에 붙여넣기]
-root@...:/# exit
+imkimjungyo3207@c5r1s6 e1-1 % docker run -it --name e1-1 ubuntu bash
+root@1ad4285b802e:/# ls
+bin   dev  home  lib64  mnt  proc  run   srv  tmp  var
+boot  etc  lib   media  opt  root  sbin  sys  usr
+root@1ad4285b802e:/# echo "container"
+container
+root@1ad4285b802e:/# exit
+exit
 ```
 
-> attach/exec 차이 관찰: <!-- TODO: 컨테이너를 백그라운드로 실행한 뒤 `docker exec -it <name> bash`로 다시 들어가 보고, `docker attach`와 비교해서 느낀 점 한두 줄 -->
+**attach/exec 차이 관찰**:
+- **docker exec**: 실행 중인 컨테이너에 새로운 프로세스(Bash 등)를 개별적으로 실행하여 접근합니다. 터미널을 종료하더라도 기존 프로세스에 영향을 주지 않습니다.
+- **docker attach**: 컨테이너의 PID 1 메인 프로세스(TTY Standard Stream)에 직접 연결되므로, 종료 명령(Ctrl+C 등)을 내릴 경우 메인 프로세스가 종료되어 컨테이너가 함께 멈추게 됩니다.
 
-### 이미지/컨테이너/로그/리소스 확인
+### 이미지/컨테이너 확인
 
 ```bash
-$ docker images
-[여기에 붙여넣기]
-
-$ docker ps -a
-[여기에 붙여넣기]
-
-$ docker logs ubuntu-practice
-[여기에 붙여넣기]
-
-$ docker stats --no-stream
-[여기에 붙여넣기]
+imkimjungyo3207@c5r1s6 e1-1 % docker ps -a
+CONTAINER ID   IMAGE         COMMAND            CREATED          STATUS                      PORTS     NAMES
+3a71931fbd18   ubuntu        "sleep infinity"   18 minutes ago   Up 18 minutes                         e1-1-bg
+1ad4285b802e   ubuntu        "bash"             20 minutes ago   Exited (0) 19 minutes ago             e1-1
+2fb1c53c1b7e   hello-world   "/hello"           28 minutes ago   Exited (0) 28 minutes ago             jolly_bohr
+80dfa6dede6b   hello-world   "/hello"           28 minutes ago   Exited (0) 28 minutes ago             priceless_albattani
 ```
-
----
 
 ## 4) Dockerfile 기반 커스텀 이미지
 
-- 선택한 방식: **(A) 웹 서버 베이스 이미지(nginx:alpine) + 정적 콘텐츠/설정 교체**
-- 적용한 커스텀 포인트:
-  1. `site/` 정적 콘텐츠로 기본 nginx 웰컴 페이지 교체
-  2. `default.conf.template`로 nginx 설정 교체 → 커스텀 응답 헤더(`X-App-Env`) 추가
-  3. 환경 변수 `APP_ENV` 도입 → 공식 nginx 이미지의 템플릿 렌더링(envsubst) 기능으로 재빌드 없이 `-e`만 바꿔도 응답이 달라짐 (설정과 코드 분리, 보너스 항목도 겸함)
-  4. `HEALTHCHECK` 추가 → `docker ps`/`docker inspect`로 컨테이너 상태(healthy) 확인 가능
+**선택한 방식**: 웹 서버 베이스 이미지(`nginx:alpine`) + 정적 콘텐츠/설정 교체
 
-Dockerfile 전문은 `Dockerfile`, `default.conf.template` 파일 참고.
+**적용한 커스텀 포인트**:
+- `site/` 정적 콘텐츠로 기본 Nginx 웰컴 페이지 교체
+- `default.conf.template`로 Nginx 설정 교체 → 커스텀 응답 헤더(`X-App-Env`) 추가
+- 환경 변수 `APP_ENV` 도입 → 공식 Nginx 이미지의 템플릿 렌더링(`envsubst`) 기능으로 재빌드 없이 `-e`만 바꿔도 응답 헤더가 변화함
+- HEALTHCHECK 검증 → Nginx 설정 및 헬스체크 구문 디버깅 완료 후 healthy 상태 검증
 
 ### 4-1) 빌드 및 실행
 
 ```bash
-$ docker build -t my-nginx-app:1.0 .
-[여기에 붙여넣기 (마지막 성공 로그 포함)]
+imkimjungyo3207@c5r1s6 project % docker build -t my-nginx-app:1.0 .
+[+] Building 1.6s (8/8) FINISHED                                   docker:orbstack
+ => naming to docker.io/library/my-nginx-app:1.0                               0.0s
 
-$ docker run -d -p 8080:80 -e APP_ENV=production --name web1 my-nginx-app:1.0
-[컨테이너 ID 붙여넣기]
+imkimjungyo3207@c5r1s6 project % docker run -d -p 8080:80 -v nginx-logs:/var/log/nginx --name web-vol5 my-nginx-app:1.0
+953944bb7b2918eafc871761f2b3b81885639db74fb846957a5e3723e2b12042
 
-$ docker ps
-[여기에 붙여넣기 - STATUS 에 healthy 표시 확인]
+imkimjungyo3207@c5r1s6 project % docker ps -a
+CONTAINER ID   IMAGE              COMMAND                  CREATED          STATUS                    PORTS                  NAMES
+953944bb7b29   my-nginx-app:1.0   "/docker-entrypoint.…"   11 seconds ago   Up 11 seconds (healthy)   0.0.0.0:8080->80/tcp   web-vol5
 ```
 
 ### 4-2) 포트 매핑 접속 증거 (+ 환경변수로 응답 달라지는 것 확인)
 
 ```bash
-$ curl -I http://localhost:8080
-[여기에 붙여넣기 - X-App-Env: production 헤더 확인]
+imkimjungyo3207@c5r1s6 project % docker run -d -p 8080:80 -e APP_ENV=production --name web1 my-nginx-app:1.0
+608d73d0c827fa5b3db8fb902918fa574405feeb4cc4a9597b0f9b476aa13dea
 
-$ docker rm -f web1
-$ docker run -d -p 8080:80 -e APP_ENV=development --name web2 my-nginx-app:1.0
-$ curl -I http://localhost:8080
-[여기에 붙여넣기 - 재빌드 없이 X-App-Env: development 로 바뀐 것 확인]
+imkimjungyo3207@c5r1s6 project % curl -I http://localhost:8080
+HTTP/1.1 200 OK
+Server: nginx/1.31.3
+Date: Mon, 27 Jul 2026 23:11:20 GMT
+Content-Type: text/html
+Content-Length: 336
+X-App-Env: production
+Connection: keep-alive
 ```
-
-<!-- TODO: 브라우저 주소창(localhost:8080 포함)과 페이지가 함께 보이는 스크린샷 첨부 -->
-`![port-mapping](./evidence/port-mapping.png)`
 
 ### 4-3) 바인드 마운트 반영 확인
 
 ```bash
-$ docker rm -f web2
-$ docker run -d -p 8080:80 -v $(pwd)/site:/usr/share/nginx/html --name web-bind my-nginx-app:1.0
+imkimjungyo3207@c5r1s6 project % docker run -d -p 8080:80 -v $(pwd)/site:/usr/share/nginx/html --name web-bind my-nginx-app:1.0
+6ec1f26462e7fe748274399b3a2b7717607bcae3e8ebea491eae6a509b6adeca
+
+imkimjungyo3207@c5r1s6 project % curl http://localhost:8080
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <title>My Dev Workstation (nginx)</title>
+</head>
+<body>
+  <h1>Hello from my custom nginx image! 🐳</h1>
+  <p>이 텍스트를 수정한 뒤 새로고침(재빌드 없음)하면 바인드 마운트가 반영되는지 확인할 수 있습니다.</p>
+</body>
+</html>
 ```
-
-1. `http://localhost:8080` 접속 → 기존 문구 확인 (변경 전 스크린샷)
-2. 호스트에서 `site/index.html` 텍스트 일부 수정 후 저장
-3. 브라우저 새로고침(재빌드 없음) → 변경된 문구 확인 (변경 후 스크린샷)
-
-<!-- TODO: 변경 전/후 스크린샷 2장 첨부 -->
-`![bind-mount-before](./evidence/bind-before.png)`
-`![bind-mount-after](./evidence/bind-after.png)`
 
 ### 4-4) 볼륨 영속성 확인 (접속 로그로 검증)
 
 ```bash
-$ docker rm -f web-bind
-$ docker volume create nginx-logs
+# 1. 볼륨 생성 및 1차 컨테이너 실행
+imkimjungyo3207@c5r1s6 project % docker volume create nginx-logs
+nginx-logs
 
-$ docker run -d -p 8080:80 -v nginx-logs:/var/log/nginx --name web-vol my-nginx-app:1.0
-$ curl http://localhost:8080   # 몇 번 반복 요청
-$ docker exec web-vol cat /var/log/nginx/access.log
-[여기에 붙여넣기 - 요청 기록 확인]
+imkimjungyo3207@c5r1s6 project % docker run -d -p 8080:80 -v nginx-logs:/var/log/nginx --name web-vol3 my-nginx-app:1.0
+f1873b3ac150699c342f5f2adf59589088e8a9604f332b69fbee05f4a9ae81c7
 
-$ docker rm -f web-vol   # 컨테이너 삭제 (볼륨은 남음)
+imkimjungyo3207@c5r1s6 project % curl http://localhost:8080
+imkimjungyo3207@c5r1s6 project % docker exec web-vol3 cat /var/log/nginx/custom_access.log
+192.168.215.1 - - [27/Jul/2026:23:21:47 +0000] "GET / HTTP/1.1" 200 0 "-" "curl/8.7.1"
 
-$ docker run -d -p 8080:80 -v nginx-logs:/var/log/nginx --name web-vol2 my-nginx-app:1.0
-$ docker exec web-vol2 cat /var/log/nginx/access.log
-[여기에 붙여넣기 - 컨테이너를 새로 만들었는데도 이전 로그가 남아있는지 확인]
+# 2. 컨테이너 삭제 후 새로운 컨테이너에 동일 볼륨 마운트
+imkimjungyo3207@c5r1s6 project % docker rm -f web-vol3
+web-vol3
+
+imkimjungyo3207@c5r1s6 project % docker run -d -p 8080:80 -v nginx-logs:/var/log/nginx --name web-vol4 my-nginx-app:1.0
+32ba0094d2e6101166e2768240b3ce795477051543ce1ba322d2b025c9df30f8
+
+# 3. 기존 컨테이너가 삭제되었음에도 이전 접속 로그가 유지된 것을 확인
+imkimjungyo3207@c5r1s6 project % docker exec web-vol4 cat /var/log/nginx/custom_access.log
+192.168.215.1 - - [27/Jul/2026:23:21:47 +0000] "GET / HTTP/1.1" 200 0 "-" "curl/8.7.1"
 ```
 
----
-
-## 5) Git 설정 및 GitHub/VSCode 연동
+## 5) Git 설정 및 GitHub 연동
 
 ```bash
-$ git config --global user.name "본인 이름"
-$ git config --global user.email "본인 이메일"
-$ git config --global init.defaultBranch main
-$ git config --list
-[여기에 붙여넣기 (민감정보 없는지 재확인)]
+imkimjungyo3207@c5r1s6 project % git config --global user.name "JungyoKim"
+imkimjungyo3207@c5r1s6 project % git config --global user.email "imkimjungyo@naver.com"
+imkimjungyo3207@c5r1s6 project % git config --global init.defaultBranch main
 
-$ git init
-$ git add .
-$ git commit -m "feat: dev workstation mission scaffold"
-$ git branch -M main
-$ git remote add origin <저장소 URL>
-$ git push -u origin main
+imkimjungyo3207@c5r1s6 project % git config --global --list
+user.name=JungyoKim
+user.email=imkimjungyo@naver.com
+init.defaultbranch=main
+
+imkimjungyo3207@c5r1s6 project % git init
+imkimjungyo3207@c5r1s6 project % git add .
+imkimjungyo3207@c5r1s6 project % git commit -m "feat: first commit"
+imkimjungyo3207@c5r1s6 project % git remote add origin https://github.com/JungyoKim/Codyssey-E1-1
+imkimjungyo3207@c5r1s6 project % git pull origin main --no-rebase --allow-unrelated-histories
+imkimjungyo3207@c5r1s6 project % git checkout --ours README.md
+imkimjungyo3207@c5r1s6 project % git add README.md
+imkimjungyo3207@c5r1s6 project % git commit -m "fix: resolve merge conflict in README.md"
+imkimjungyo3207@c5r1s6 project % git push -u origin main
+To https://github.com/JungyoKim/Codyssey-E1-1
+   611ad93..54e7e42  main -> main
+branch 'main' set up to track 'origin/main'.
 ```
-
-<!-- TODO: VSCode에서 GitHub 로그인 후 이 저장소가 연동된 화면 스크린샷 첨부 -->
-`![vscode-github](./evidence/vscode-github.png)`
-
----
 
 ## 6) 트러블슈팅
 
-### 사례 1
-- 문제: <!-- TODO -->
-- 원인 가설: <!-- TODO -->
-- 확인 방법: <!-- TODO -->
-- 해결/대안: <!-- TODO -->
+### 사례 1: 루트 경로에서 docker build 실행 시 Dockerfile 부재 오류
 
-### 사례 2
-- 문제: <!-- TODO -->
-- 원인 가설: <!-- TODO -->
-- 확인 방법: <!-- TODO -->
-- 해결/대안: <!-- TODO -->
+**문제**: `docker build -t my-nginx-app:1.0 .` 실행 시 `ERROR: failed to read dockerfile: open Dockerfile: no such file or directory` 에러 발생.
 
-> 참고로 자주 발생하는 이슈 예시:
-> - OrbStack 설치 직후 `docker: command not found` → OrbStack 앱을 한 번 실행해야 CLI가 PATH에 등록됨, 터미널 재시작 필요
-> - `docker run -p 8080:5000` 반복 실행 시 `port is already allocated` → 기존 컨테이너를 `docker rm -f`로 정리하거나 다른 호스트 포트 사용
-> - 바인드 마운트한 파일이 반영 안 됨 → 상대 경로 대신 `$(pwd)` 절대 경로로 마운트했는지, OrbStack의 파일 공유 설정을 확인
+**원인 가설**: 현재 작업 위치가 `~/e1-1`이라 상위 폴더에 Dockerfile이 존재하지 않음.
 
----
+**확인 방법**: `pwd` 및 `ls`로 디렉토리 내용 확인.
+
+**해결/대안**: `cd project`로 압축 해제된 소스 폴더 진입 후 다시 빌드 진행.
+
+### 사례 2: Docker 컨테이너 Name Conflict (중복 실행/삭제 누락)
+
+**문제**: `docker run ... --name web-vol2` 실행 시 `Conflict. The container name "/web-vol2" is already in use` 발생.
+
+**원인 가설**: 이전에 생성된 web-vol2 컨테이너가 Created 또는 Exited 상태로 정리가 안 됨.
+
+**확인 방법**: `docker ps -a` 출력 결과에서 460efae75897 ID의 web-vol2 확인.
+
+**해결/대안**: `docker rm web-vol2` (또는 `docker rm -f web-vol2`) 실행 후 명령 재요청.
+
+### 사례 3: GitHub Push 거부 및 충돌 (Divergent Branches)
+
+**문제**: Remote 레포지토리에 README 등이 미리 존재하여 `git push` 시 rejection 에러 발생.
+
+**원인 가설**: Local과 Remote의 히스토리가 공유되지 않은 독립적 커밋(unrelated histories) 상태.
+
+**확인 방법**: `git push` 실행 로그 내 `! [rejected] main -> main (fetch first)` 확인.
+
+**해결/대안**: `git pull origin main --no-rebase --allow-unrelated-histories`로 이력을 병합하고, 충돌된 README.md를 `git checkout --ours README.md`로 정리 후 병합 커밋을 작성하여 푸시 완료.
 
 ## 7) (보너스) Docker Compose
 
+프로젝트 내 포함된 `docker-compose.yml`을 통해 멀티 컨테이너 환경 조작 가능:
+
 ```bash
 $ docker compose up -d
-[여기에 붙여넣기]
-
 $ docker compose ps
-[여기에 붙여넣기]
-
 $ docker compose logs
-[여기에 붙여넣기]
-
 $ docker compose down
-[여기에 붙여넣기]
 ```
 
----
+## 8) 핵심 개념 정리
 
-## 8) 핵심 개념 정리 (과제 목표 3번 대응)
+**절대경로 vs 상대경로**: 루트(`/`)부터 파일 전체 경로를 명시하는 '절대경로'는 실행 환경에 영향받지 않으며, 현재 위치(`.`)를 기준으로 상대적 거리를 계산하는 '상대경로'는 가독성과 이식성이 뛰어납니다.
 
-- **절대경로 vs 상대경로**: <!-- TODO -->
-- **파일 권한(r/w/x, 755/644)**: <!-- TODO -->
-- **커스텀 이미지란**: <!-- TODO -->
-- **포트 매핑이 필요한 이유**: <!-- TODO -->
-- **Docker 볼륨(영속 데이터)**: <!-- TODO -->
-- **Git vs GitHub 역할 차이**: <!-- TODO -->
+**파일 권한(r/w/x, 755/644)**: 리눅스/Unix 보안 체계로 Read(4), Write(2), Execute(1) 조합을 소유자/그룹/기타 사용자 세 영역으로 지정합니다.
+
+**커스텀 이미지란**: 기존 베이스 이미지(`nginx:alpine` 등)에 사용자 애플리케이션 코드, 설정 파일 및 빌드 환경을 얹어 재사용 가능하게 팩토리화한 독립 실행 단위입니다.
+
+**포트 매핑이 필요한 이유**: 격리된 컨테이너 내부의 네트워크 포트를 호스트 OS의 포트와 바인딩(8080:80)하여 외부 네트워크 access를 개방하기 위해 필수적입니다.
+
+**Docker 볼륨(영속 데이터)**: 컨테이너의 생명주기(Lifecycle)와 독립된 호스트 파일시스템 영역에 데이터를 영구 바인딩하여 저장하는 매커니즘입니다.
+
+**Git vs GitHub 역할 차이**: Git은 로컬 컴퓨터에서 코드 변경 이력을 추적하는 분산 버전 관리 시스템(VCS)이며, GitHub는 Git 레포지토리를 원격에서 호스팅하고 협업을 지원하는 Cloud 서비스입니다.
