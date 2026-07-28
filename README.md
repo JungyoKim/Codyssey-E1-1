@@ -318,7 +318,7 @@ branch 'main' set up to track 'origin/main'.
 
 프로젝트 내 포함된 `docker-compose.yml`을 통해 멀티 컨테이너 환경 조작 가능:
 
-​```bash
+```bash
 $ docker compose up -d
 [+] Running 2/2
  ✔ Network project_default  Created
@@ -343,7 +343,7 @@ $ docker compose down
 [+] Running 2/2
  ✔ Container devws-compose  Removed
  ✔ Network project_default  Removed
-​```
+```
 
 ![healthcheck](./evidence/healthcheck.png)
 
