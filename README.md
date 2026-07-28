@@ -7,9 +7,9 @@
 
 ## 2) 실행 환경
 
-- **OS**: macOS 15.x (Apple Silicon)
+- **OS**: macOS 15.7.7
 - **Shell / Terminal**: zsh / macOS Console
-- **컨테이너 런타임**: OrbStack 1.x (Docker 엔진 내장, sudo 불필요)
+- **컨테이너 런타임**: OrbStack
 - **Docker**: `Docker version 28.5.2, build ecc6942`
 - **Git**: `git version 2.39.5 (Apple Git-154)`
 
