@@ -316,8 +316,6 @@ branch 'main' set up to track 'origin/main'.
 
 ## 7) Docker Compose
 
-## 7) Docker Compose
-
 프로젝트 내 포함된 `docker-compose.yml`을 통해 멀티 컨테이너 환경 조작 가능:
 
 ​```bash
