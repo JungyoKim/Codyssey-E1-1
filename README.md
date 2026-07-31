@@ -275,6 +275,8 @@ CONTAINER ID   IMAGE              COMMAND                  CREATED          STAT
 953944bb7b29   my-nginx-app:1.0   "/docker-entrypoint.…"   11 seconds ago   Up 11 seconds (healthy)   0.0.0.0:8080->80/tcp   web-vol5
 ```
 
+![healthcheck](./evidence/healthcheck.png)
+
 ### 4-2) 포트 매핑 접속 증거 (+ 환경변수로 응답 달라지는 것 확인)
 
 ```bash
@@ -553,8 +555,6 @@ $ docker compose down
 ```
 
 ※ `up`(기동) → `ps`(상태 확인) → `logs`(로그 확인) → `down`(정리)의 흐름이, 여러 컨테이너를 개별 `docker run` / `docker rm`으로 관리할 때보다 훨씬 단순한 "운영 관점의 상태 확인 루틴"이 된다.
-
-![healthcheck](./evidence/healthcheck.png)
 
 ### 8-4) 환경 변수 활용
 
