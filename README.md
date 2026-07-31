@@ -494,7 +494,7 @@ volumes:
   nginx-logs:
 ```
 
-**배움 포인트**: `docker run -p 8080:80 -v ... -e APP_ENV=... my-nginx-app:1.0` 처럼 매번 옵션을 나열해야 했던 실행 명령이, `docker-compose.yml`이라는 "문서화된 실행 설정" 하나로 고정된다. 이후 누구나 `docker compose up`만으로 동일한 환경을 재현할 수 있다.
+※ `docker run -p 8080:80 -v ... -e APP_ENV=... my-nginx-app:1.0` 처럼 매번 옵션을 나열해야 했던 실행 명령이, `docker-compose.yml`이라는 "문서화된 실행 설정" 하나로 고정된다. 이후 누구나 `docker compose up`만으로 동일한 환경을 재현할 수 있다.
 
 ### 8-2) Docker Compose 멀티 컨테이너 + 네트워크 통신 확인
 
@@ -526,7 +526,7 @@ $ docker compose exec cache redis-cli ping
 PONG
 ```
 
-**배움 포인트**: 컨테이너를 IP로 알 필요 없이, Compose가 만든 기본 브리지 네트워크 안에서 서비스명(`cache`)이 곧 호스트명으로 동작한다(서비스 디스커버리). `web`이 `cache:6379`에 TCP로 접속되는 것이 서로 다른 컨테이너 간 네트워크 통신이 된다는 직접적인 증거다.
+※ 컨테이너를 IP로 알 필요 없이, Compose가 만든 기본 브리지 네트워크 안에서 서비스명(`cache`)이 곧 호스트명으로 동작한다(서비스 디스커버리). `web`이 `cache:6379`에 TCP로 접속되는 것이 서로 다른 컨테이너 간 네트워크 통신이 된다는 직접적인 증거다.
 
 ### 8-3) Compose 운영 명령어 (up / ps / logs / down)
 
@@ -552,7 +552,7 @@ $ docker compose down
  Network codyssey-e1-1_default  Removed
 ```
 
-**배움 포인트**: `up`(기동) → `ps`(상태 확인) → `logs`(로그 확인) → `down`(정리)의 흐름이, 여러 컨테이너를 개별 `docker run` / `docker rm`으로 관리할 때보다 훨씬 단순한 "운영 관점의 상태 확인 루틴"이 된다.
+※ `up`(기동) → `ps`(상태 확인) → `logs`(로그 확인) → `down`(정리)의 흐름이, 여러 컨테이너를 개별 `docker run` / `docker rm`으로 관리할 때보다 훨씬 단순한 "운영 관점의 상태 확인 루틴"이 된다.
 
 ![healthcheck](./evidence/healthcheck.png)
 
@@ -570,7 +570,7 @@ X-App-Env: development
 Accept-Ranges: bytes
 ```
 
-**배움 포인트**: 포트/모드 같은 실행 시점 설정을 이미지(코드) 밖으로 분리해두면, 이미지를 재빌드하지 않고도 환경별로 다르게 기동할 수 있다(설정과 코드의 분리).
+※ 포트/모드 같은 실행 시점 설정을 이미지(코드) 밖으로 분리해두면, 이미지를 재빌드하지 않고도 환경별로 다르게 기동할 수 있다(설정과 코드의 분리).
 
 ### 8-5) GitHub SSH 키 설정
 
@@ -612,4 +612,4 @@ To github.com:JungyoKim/Codyssey-E1-1.git
    705e86d..f2510b1  main -> main
 ```
 
-**배움 포인트**: HTTPS는 매 인증마다 개인 접근 토큰(PAT)/비밀번호 입력이 필요할 수 있는 반면, SSH는 공개키 기반 인증이라 한 번 등록해두면 이후 추가 입력 없이 안전하게 인증된다. 저장소 전용 키를 별도로 분리해두면 키가 유출돼도 영향 범위를 그 저장소로 한정할 수 있다는 보안 습관도 함께 확인했다.
+※ HTTPS는 매 인증마다 개인 접근 토큰(PAT)/비밀번호 입력이 필요할 수 있는 반면, SSH는 공개키 기반 인증이라 한 번 등록해두면 이후 추가 입력 없이 안전하게 인증된다. 저장소 전용 키를 별도로 분리해두면 키가 유출돼도 영향 범위를 그 저장소로 한정할 수 있다는 보안 습관도 함께 확인했다.
