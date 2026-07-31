@@ -23,7 +23,7 @@
 - [x] Docker 볼륨으로 데이터 영속성 확인 (컨테이너 삭제 전/후)
 - [x] Git 사용자 정보 설정 + GitHub/VSCode 연동
 
-### 보너스 항목 (선택, 8) 보너스 과제 참고)
+### 보너스 항목 (선택 — 아래 8) 보너스 과제 섹션 참고)
 
 - [x] Docker Compose 기초 (`docker-compose.yml` 단일 서비스 구조)
 - [x] Docker Compose 멀티 컨테이너 (2개 서비스 + 컨테이너 간 네트워크 통신 확인)
@@ -42,6 +42,10 @@
 | 바인드 마운트 | `-v $(pwd)/site:/usr/share/nginx/html` | 4-3) 섹션 |
 | 볼륨 영속성 | `docker volume create` + `docker exec ... cat access.log` | 4-4) 섹션 |
 | Git/GitHub | `git config --global --list`, `git push` | 5) 섹션 |
+| (보너스) Compose 멀티 컨테이너/네트워크 | `docker compose exec web nc -zv cache 6379` | 8-2) 섹션 |
+| (보너스) Compose 운영 명령어 | `docker compose up/ps/logs/down` | 8-3) 섹션 |
+| (보너스) 환경 변수 | `curl -I` (`X-App-Env` 헤더) | 8-4) 섹션 |
+| (보너스) SSH 푸시 | `ssh -T git@github.com`, `git push`(SSH) | 8-5) 섹션 |
 
 ---
 
@@ -456,3 +460,156 @@ branch 'main' set up to track 'origin/main'.
 
 **Git vs GitHub 역할 차이**:
 Git은 로컬 컴퓨터에서 코드 변경 이력을 추적하는 분산 버전 관리 시스템(VCS)이고, GitHub는 Git 레포지토리를 원격에서 호스팅하고 협업을 지원하는 Cloud 서비스.
+
+## 8) 보너스 과제 (선택)
+
+instruction.txt 5번 항목의 보너스 과제 5개를 모두 수행했다. 필수 항목과 섞이지 않도록 별도 섹션으로 분리했다.
+
+### 8-1) Docker Compose 기초 — 실행 설정의 코드화
+
+`docker-compose.yml`:
+
+```yaml
+services:
+  web:
+    build: .
+    container_name: devws-compose
+    ports:
+      - "8080:80"
+    volumes:
+      - ./site:/usr/share/nginx/html   # 바인드 마운트: 정적 파일 실시간 반영
+      - nginx-logs:/var/log/nginx      # 네임드 볼륨: 접속 로그 영속화
+    environment:
+      - APP_ENV=development
+    depends_on:
+      - cache
+
+  cache:
+    image: redis:alpine
+    container_name: devws-cache
+    expose:
+      - "6379"
+
+volumes:
+  nginx-logs:
+```
+
+**배움 포인트**: `docker run -p 8080:80 -v ... -e APP_ENV=... my-nginx-app:1.0` 처럼 매번 옵션을 나열해야 했던 실행 명령이, `docker-compose.yml`이라는 "문서화된 실행 설정" 하나로 고정된다. 이후 누구나 `docker compose up`만으로 동일한 환경을 재현할 수 있다.
+
+### 8-2) Docker Compose 멀티 컨테이너 + 네트워크 통신 확인
+
+`web`(nginx) + `cache`(redis) 두 서비스를 함께 띄우고, 같은 Compose 네트워크 안에서 서비스명으로 서로를 찾고 접속할 수 있는지 확인했다.
+
+```bash
+$ docker compose up -d
+ Network codyssey-e1-1_default  Created
+ Container devws-cache  Created
+ Container devws-compose  Created
+ Container devws-cache  Started
+ Container devws-compose  Started
+
+$ docker compose ps
+NAME            IMAGE               COMMAND                   SERVICE   STATUS                                      PORTS
+devws-cache     redis:alpine        "docker-entrypoint.s…"   cache     Up Less than a second                        6379/tcp
+devws-compose   codyssey-e1-1-web   "/docker-entrypoint.…"   web       Up Less than a second (health: starting)     0.0.0.0:8080->80/tcp
+
+# web 컨테이너 안에서 cache 서비스명이 DNS로 해석되는지 확인 (서비스 디스커버리)
+$ docker compose exec web getent hosts cache
+172.19.0.2        cache  cache
+
+# web -> cache:6379 로 TCP 연결이 실제로 열리는지 확인 (컨테이너 간 네트워크 통신)
+$ docker compose exec web nc -zv cache 6379
+cache (172.19.0.2:6379) open
+
+# cache 컨테이너 자체 동작 확인
+$ docker compose exec cache redis-cli ping
+PONG
+```
+
+**배움 포인트**: 컨테이너를 IP로 알 필요 없이, Compose가 만든 기본 브리지 네트워크 안에서 서비스명(`cache`)이 곧 호스트명으로 동작한다(서비스 디스커버리). `web`이 `cache:6379`에 TCP로 접속되는 것이 서로 다른 컨테이너 간 네트워크 통신이 된다는 직접적인 증거다.
+
+### 8-3) Compose 운영 명령어 (up / ps / logs / down)
+
+```bash
+$ docker compose logs --tail=6
+devws-compose  | 2026/07/31 02:18:58 [notice] 1#1: start worker process 38
+devws-cache    | 1:M 31 Jul 2026 02:18:58.222 * <ReJSON> Initialized shared string cache, thread safe: true.
+devws-cache    | 1:M 31 Jul 2026 02:18:58.222 * Module 'ReJSON' loaded from /usr/local/lib/redis/modules//rejson.so
+devws-cache    | 1:M 31 Jul 2026 02:18:58.222 * <search> Acquired RedisJSON_V8 API
+devws-cache    | 1:M 31 Jul 2026 02:18:58.243 * Server initialized
+devws-cache    | 1:M 31 Jul 2026 02:18:58.243 * Ready to accept connections tcp
+
+$ docker compose down
+ Container devws-compose  Stopping
+ Container devws-compose  Stopped
+ Container devws-compose  Removing
+ Container devws-compose  Removed
+ Container devws-cache  Stopping
+ Container devws-cache  Stopped
+ Container devws-cache  Removing
+ Container devws-cache  Removed
+ Network codyssey-e1-1_default  Removing
+ Network codyssey-e1-1_default  Removed
+```
+
+**배움 포인트**: `up`(기동) → `ps`(상태 확인) → `logs`(로그 확인) → `down`(정리)의 흐름이, 여러 컨테이너를 개별 `docker run` / `docker rm`으로 관리할 때보다 훨씬 단순한 "운영 관점의 상태 확인 루틴"이 된다.
+
+![healthcheck](./evidence/healthcheck.png)
+
+### 8-4) 환경 변수 활용
+
+`docker-compose.yml`의 `environment: [APP_ENV=development]`가 nginx 이미지의 `envsubst` 템플릿 렌더링에 그대로 주입되어, 재빌드 없이 응답 헤더가 달라진다(4-2 섹션의 `docker run -e APP_ENV=...`와 동일한 매커니즘을 Compose의 선언형 설정으로 재현한 것).
+
+```bash
+$ curl -sI http://localhost:8080
+HTTP/1.1 200 OK
+Server: nginx/1.31.3
+Content-Type: text/html
+Content-Length: 362
+X-App-Env: development
+Accept-Ranges: bytes
+```
+
+**배움 포인트**: 포트/모드 같은 실행 시점 설정을 이미지(코드) 밖으로 분리해두면, 이미지를 재빌드하지 않고도 환경별로 다르게 기동할 수 있다(설정과 코드의 분리).
+
+### 8-5) GitHub SSH 키 설정
+
+HTTPS 대신 SSH로 푸시가 가능하도록, 미션 전용 SSH 키를 새로 생성해 GitHub 계정에 등록했다.
+
+```bash
+$ ssh-keygen -t ed25519 -C "imkimjungyo@naver.com (Codyssey-E1-1)" -f ~/.ssh/id_ed25519_codyssey -N ""
+# -t ed25519: 최신 권장 알고리즘으로 키 생성
+# -C: 키를 구분하기 위한 주석(코멘트)
+# -f: 키 파일 경로 (기존 id_rsa와 별도로 이 저장소 전용 키를 분리 생성)
+# -N "": 패스프레이즈 없이 생성
+Generating public/private ed25519 key pair.
+Your public key has been saved in ~/.ssh/id_ed25519_codyssey.pub
+
+$ cat ~/.ssh/id_ed25519_codyssey.pub
+ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEj/hIbNHLeguTcAe2yGH9qrPpv1XLpKKjlmpWhWZoQZ imkimjungyo@naver.com (Codyssey-E1-1)
+```
+
+위 공개키를 GitHub → **Settings → SSH and GPG keys → New SSH key**에 등록한 뒤, 연결과 인증을 확인했다.
+
+```bash
+$ ssh -T git@github.com
+# -T: 셸을 요청하지 않고 인증만 수행 (GitHub는 셸 접속을 제공하지 않으므로 표준 점검 방법)
+Hi JungyoKim/Codyssey-E1-1! You've successfully authenticated, but GitHub does not provide shell access.
+```
+
+원격 저장소 URL을 HTTPS에서 SSH로 전환한 뒤 실제로 push까지 성공했다.
+
+```bash
+$ git remote set-url origin git@github.com:JungyoKim/Codyssey-E1-1.git
+# remote URL 형식이 https://github.com/... 에서 git@github.com:... 로 바뀜
+$ git remote -v
+origin  git@github.com:JungyoKim/Codyssey-E1-1.git (fetch)
+origin  git@github.com:JungyoKim/Codyssey-E1-1.git (push)
+
+$ git push -u origin main
+ok f2510b1 (3 files +251 -41)
+To github.com:JungyoKim/Codyssey-E1-1.git
+   705e86d..f2510b1  main -> main
+```
+
+**배움 포인트**: HTTPS는 매 인증마다 개인 접근 토큰(PAT)/비밀번호 입력이 필요할 수 있는 반면, SSH는 공개키 기반 인증이라 한 번 등록해두면 이후 추가 입력 없이 안전하게 인증된다. 저장소 전용 키를 별도로 분리해두면 키가 유출돼도 영향 범위를 그 저장소로 한정할 수 있다는 보안 습관도 함께 확인했다.
