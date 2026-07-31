@@ -10,6 +10,8 @@
 
 ## 2) 수행 항목 체크리스트
 
+### 필수 항목
+
 - [x] 터미널 기본 조작 (이동/생성/복사/이름변경/삭제/내용확인)
 - [x] 파일/디렉토리 권한 변경 실습 (각 1개 이상)
 - [x] Docker 설치 확인 (`docker --version`, `docker info`)
@@ -20,7 +22,14 @@
 - [x] 바인드 마운트로 변경사항 즉시 반영 확인
 - [x] Docker 볼륨으로 데이터 영속성 확인 (컨테이너 삭제 전/후)
 - [x] Git 사용자 정보 설정 + GitHub/VSCode 연동
-- [x] (보너스) Docker Compose 실행 준비
+
+### 보너스 항목 (선택, 8) 보너스 과제 참고)
+
+- [x] Docker Compose 기초 (`docker-compose.yml` 단일 서비스 구조)
+- [x] Docker Compose 멀티 컨테이너 (2개 서비스 + 컨테이너 간 네트워크 통신 확인)
+- [x] Compose 운영 명령어 (`up` / `ps` / `logs` / `down`)
+- [x] 환경 변수 활용 (Compose `environment`로 응답 헤더 변경)
+- [x] GitHub SSH 키 설정 (SSH 푸시 전환)
 
 ## 3) 검증 방법 & 결과 위치
 
@@ -428,46 +437,7 @@ branch 'main' set up to track 'origin/main'.
 
 **해결/대안**: `git pull origin main --no-rebase --allow-unrelated-histories`로 이력을 병합하고, 충돌된 README.md를 `git checkout --ours README.md`로 정리 후 병합 커밋을 작성하여 푸시 완료.
 
-## 7) Docker Compose
-
-프로젝트 내 포함된 `docker-compose.yml`을 통해 멀티 컨테이너 환경 조작 가능:
-
-```bash
-$ docker compose up -d
-# docker compose up: docker-compose.yml에 정의된 모든 서비스+네트워크를 일괄 기동
-#   -d (detach): 백그라운드로 실행
-[+] Running 2/2
- ✔ Network project_default  Created
- ✔ Container devws-compose  Started
-
-$ docker compose ps
-# docker compose ps: compose가 관리하는 컨테이너들의 상태만 별도로 조회
-NAME            IMAGE         COMMAND                   SERVICE   STATUS                    PORTS
-devws-compose   project-web   "/docker-entrypoint.…"   web       Up (health: starting)     0.0.0.0:8080->80/tcp
-
-$ curl -I http://localhost:8080
-HTTP/1.1 200 OK
-Server: nginx/1.31.3
-X-App-Env: development
-...
-
-$ docker compose logs
-# docker compose logs: compose로 띄운 전체 서비스의 로그를 한 번에 조회
-devws-compose  | 2026/07/28 02:40:38 [notice] 1#1: nginx/1.31.3
-devws-compose  | 2026/07/28 02:40:38 [notice] 1#1: start worker processes
-...
-
-$ docker compose down
-# docker compose down: 관련 컨테이너 + 네트워크를 한 번에 정지·삭제
-#   (볼륨은 -v 옵션을 추가로 붙이지 않는 한 그대로 유지됨)
-[+] Running 2/2
- ✔ Container devws-compose  Removed
- ✔ Network project_default  Removed
-```
-
-![healthcheck](./evidence/healthcheck.png)
-
-## 8) 개념 정리
+## 7) 개념 정리
 
 **절대경로 vs 상대경로**:
 루트(`/`)부터 파일 전체 경로를 명시하는 '절대경로'는 실행 환경에 영향받지 않으며, 현재 위치(`.`)를 기준으로 상대적 거리를 계산하는 '상대경로'는 가독성과 이식성이 좋음.

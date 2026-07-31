@@ -9,6 +9,14 @@ services:
       - nginx-logs:/var/log/nginx      # 네임드 볼륨: 접속 로그 영속화
     environment:
       - APP_ENV=development
+    depends_on:
+      - cache
+
+  cache:
+    image: redis:alpine
+    container_name: devws-cache
+    expose:
+      - "6379"
 
 volumes:
   nginx-logs:
