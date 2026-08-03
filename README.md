@@ -467,7 +467,7 @@ Git은 로컬 컴퓨터에서 코드 변경 이력을 추적하는 분산 버전
 
 instruction.txt 5번 항목의 보너스 과제 5개를 모두 수행했다. 필수 항목과 섞이지 않도록 별도 섹션으로 분리했다.
 
-### 8-1) Docker Compose 기초 — 실행 설정의 코드화
+### 8-1) Docker Compose 싱글 컨테이너
 
 `docker-compose.yml`:
 
