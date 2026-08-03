@@ -7,6 +7,30 @@
 - **컨테이너 런타임**: OrbStack
 - **Docker**: `Docker version 28.5.2, build ecc6942`
 - **Git**: `git version 2.39.5 (Apple Git-154)`
+- 
+~/                                        # 홈 디렉토리
+├── e1-1/                                 # 3-1) 터미널 기초 조작 실습 전용 디렉토리
+│   ├── test.txt                          # touch → echo → chmod 644
+│   └── secure_dir/                       # mkdir → chmod 755
+│                                          #   (test_copy.txt→test_renamed.txt는 실습 후 rm으로 삭제됨)
+│
+├── .ssh/                                 # 8-5) SSH 키 (저장소 전용 키, id_rsa 등과 분리)
+│   ├── id_ed25519_codyssey               # private key
+│   └── id_ed25519_codyssey.pub           # public key → GitHub 등록
+│
+└── project/                              # = GitHub 원격 저장소 "Codyssey-E1-1" 로컬 clone (git init 실행 위치)
+    ├── .git/
+    ├── Dockerfile                        # 4) nginx:alpine 베이스 커스텀 이미지 정의
+    ├── default.conf.template             # 4) nginx 설정 교체 → X-App-Env 헤더 envsubst 렌더링
+    ├── docker-compose.yml                # 8-1)/8-2) web(nginx) + cache(redis) 멀티 서비스 정의
+    ├── README.md                         # 5) git checkout --ours로 충돌 해결한 파일
+    ├── site/                             # 4-3) 바인드 마운트 대상 (-v $(pwd)/site:/usr/share/nginx/html)
+    │   └── index.html                    #   curl 응답 바디("Hello from my custom nginx image! 🐳")
+    └── evidence/                         # 보고서 내 이미지 첨부 경로(./evidence/...) 기준 추정
+        ├── healthcheck.png               # 4-1) HEALTHCHECK 상태
+        ├── bind-before.png               # 4-3) 바인드 마운트 전
+        ├── bind-after.png                # 4-3) 바인드 마운트 후
+        └── vscode-github.png             # 5) VSCode-GitHub 연동 화면
 
 ## 2) 수행 항목 체크리스트
 
